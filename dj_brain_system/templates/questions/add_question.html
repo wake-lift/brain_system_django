@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block title %}
+Добавить вопрос в Базу
+{% endblock %}
+
+{% block content %}
+
+{% if not form_saved %}
+  <div class="col d-flex justify-content-center">
+    <div class="container" style="width: 40rem;">
+      <h3 class="adaptive-fs-title" style="text-align: center;">Добавить вопрос в Базу</h3><br>
+      <form action="{% url 'questions:add' %}" method="post" class="form adaptive-fs">
+        {% csrf_token %}
+        {% bootstrap_field form.package show_label=False placeholder="Название пакета" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.tour show_label=False placeholder="Название тура" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.number show_label=False placeholder="Номер вопроса" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.question_type show_label=False placeholder="Категория вопроса *" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.question show_label=False placeholder="Текст вопроса *" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.answer show_label=False placeholder="Ответ на вопрос *" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.pass_criteria show_label=False placeholder="Критерии зачета правильного ответа" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.comments show_label=False placeholder="Комментарий к ответу на вопрос" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.authors show_label=False placeholder="Автор(ы) вопроса" field_class="adaptive-fs" %}<br>
+        {% bootstrap_field form.sources show_label=False placeholder="Источники" field_class="adaptive-fs" %}<br>
+        {% comment %} {% bootstrap_field form.captcha show_label=False %} {% endcomment %}
+        {% bootstrap_button button_type="submit" content="Отправить" button_class="btn btn-outline-secondary adaptive-fs-big" %}
+      </form>
+    </div>
+  </div>
+
+
+
+  {% else %}
+  <div class="col d-flex justify-content-center">
+    <div class="container text-center" style="width: 40rem;">
+      <p class="text-center fs-3">Спасибо! Ваш вопрос будет добавлен в Базу после модерации.</p><br>
+      <form action="{% url 'questions:add' %}">
+        <button type="submit" class="btn btn-outline-secondary btn-lg">Добавить следующий вопрос</button>
+      </form>
+      <br>
+      <form action="{% url 'common_pages:main' %}">
+        <button type="submit" class="btn btn-outline-secondary btn-lg">На главную</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
+
+
+
+{% endblock %}

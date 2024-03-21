@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Обратная связь
+{% endblock %}
+
+
+{% block content %}
+  {% if not form_saved %}
+  <div class="col d-flex justify-content-center">
+    <div class="container" style="width: 40rem;">
+      <h3 class="adaptive-fs-title" style="text-align: center;">Форма обратной связи</h3><br>
+      <form action="{% url 'common_pages:feedback' %}" method="post" class="form adaptive-fs">
+        {% csrf_token %}
+        {% bootstrap_field form.name show_label=False placeholder="Ваше имя" field_class="adaptive-fs" %}
+        <br>
+        {% bootstrap_field form.email show_label=False placeholder="Электронная почта" field_class="adaptive-fs" %}
+        <br>
+        {% bootstrap_field form.feedback_text show_label=False placeholder="Ваше сообщение" field_class="adaptive-fs" %}
+        <br>
+        {% bootstrap_field form.captcha show_label=False %}
+        <br>
+        {% bootstrap_button button_type="submit" content="Отправить" button_class="btn btn-outline-secondary adaptive-fs-big" %}
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="col d-flex justify-content-center">
+    <div class="container text-center" style="width: 40rem;">
+      <p class="text-center fs-3">Спасибо за обратную связь!</p><br>
+      <form action="{% url 'common_pages:main' %}">
+        <button type="submit" class="btn btn-outline-secondary btn-lg">На главную</button>
+      </form>  
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

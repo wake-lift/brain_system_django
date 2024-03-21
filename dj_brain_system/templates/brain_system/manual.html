@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% block manual_title %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col-xxl-3 border-end border-3 d-none d-xxl-block">
+    <div class="container sticky-top">
+      {% with request.resolver_match.view_name as view_name %}
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:operating' %} disabled {% endif %}" href="{% url 'brain_system:operating' %}">Описание работы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:circuit' %} disabled {% endif %}" href="{% url 'brain_system:circuit' %}">Электрическая схема</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:pcb' %} disabled {% endif %}" href="{% url 'brain_system:pcb' %}">Печатная плата</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:printed' %} disabled {% endif %}" href="{% url 'brain_system:printed' %}">Печатные детали</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:bought' %} disabled {% endif %}" href="{% url 'brain_system:bought' %}">Покупные изделия</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-dark {% if view_name == 'brain_system:firmware' %} disabled {% endif %}" href="{% url 'brain_system:firmware' %}">Программное обеспечение</a>
+        </li>
+      </ul>
+      {% endwith %}
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-xl-12 col-xxl-9">
+    {% block manual_pages %}{% endblock %}
+  </div>
+</div>
+</div>
+{% endblock %}

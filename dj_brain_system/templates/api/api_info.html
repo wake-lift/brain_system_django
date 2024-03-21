@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  BrainAPI
+{% endblock %}
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 col-xxl-10">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="adaptive-fs"> 
+            <h3 class="adaptive-fs-title" style="text-align: center;">BrainAPI</h3>
+            <br><br>
+            <p class="adaptive-fs-big">
+              BrainAPI - это API-сервис, предоставляющий пользователям:
+            </p>
+            <ul>
+              <li>Cлучайный вопрос или случайный набор вопросов;</li>
+              <li>Подробную информацию о конкретном вопросе из Базы;</li>
+              <li>Добавлять в Базу новые вопросы;</li>
+              <li>Регистрироваться в системе;</li>
+            </ul>
+            <p class="adaptive-fs-big">В API реализованы:</p>
+            <ul>
+              <li> Выбор типа вопроса;</li>
+              <li> Поиск по вопросам, постраничное отображение информации;</li>
+              <li> Постраничное отображение информации.</li>
+            </ul>
+            <p class="adaptive-fs-big">Формат передачи данных: JSON.</p>
+            <p class="adaptive-fs-big">Механизм аутентификации: JWT-токены.</p>
+            <p class="adaptive-fs-big">Ограничение на количество запросов:<p>
+              <ul>
+                <li>не более 10 в минуту и не более 300 в час для анонимного пользователя;</li>
+                <li>не более 30 в минуту и не более 1500 в час для аутентифицированного пользователя.</li>
+              </ul>
+            <br>
+          </div>
+          <div class="adaptive-fs-small">
+            <h3 id="list-item-1" style="text-align: center;">Эндпойнты</h3>
+            <br>
+            <p class="adaptive-fs">
+              Подробная информация об эндпойнтах, связанных с пользователями и аутентификацией по JWT-токенам,<br>
+              доступна в формате ReDoc по адресу:
+            </p>
+            <p class="adaptive-fs-big">
+              <a href="https://brainsystem.sytes.net/api/v1/redoc/" class="link-dark" target="_blank">https://brainsystem.sytes.net/api/v1/redoc/</a>
+            </p>
+            <br><br>
+            <p class="adaptive-fs-big" style="text-align: center;">
+              <b>https://brainsystem.sytes.net/api/v1/questions/ (GET)</b>
+            </p>
+            <p style="text-align: center;">Получить случайный вопрос (набор вопросов)</p>
+            <br>
+          </div>
+          <div class="adaptive-fs-small">
+            <h3 id="list-item-2" style="text-align: center;">Параметры запроса</h3><br>
+          </div>
+            <br><br>
+            <table style="fs-6" class="table table-hover table-bordered border-secondary table-striped-columns">
+              <thead class="align-middle text-center">
+                <tr>
+                  <th scope="col">Параметр</th>
+                  <th scope="col">Тип</th>
+                  <th scope="col">Значение по умолчанию</th>
+                  <th scope="col">Описание</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                <tr>
+                  <td><code>question_type</code></td>
+                  <td>Строка. Один из трех вариантов:
+                    <ul>
+                      <li>what-where-when;</li><li>brain-ring;</li><li>jeopardy.</li>
+                    </ul>
+                  </td>
+                  <td>what-where-when</td>
+                  <td>Категория вопроса:
+                    <ul>
+                      <li>"what-where-when" - "Что-где-когда"</li><li>"brain-ring" - "брейн-ринг"</li><li>"jeopardy" - "Своя игра"</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>search</code></td>
+                  <td>Строка (не менее 3-х символов)</td>
+                  <td>-</td>
+                  <td>Поиск по тексту вопроса. Чувствителен к регистру.</td>
+                </tr>
+                <tr>
+                  <td><code>questions_limit</code></td>
+                  <td>Целое число (от 1 до 200 включительно)</td>
+                  <td>5</td>
+                  <td>Количество вопросов в выдаче</td>
+                </tr>
+                <tr>
+                  <td><code>limit</code></td>
+                  <td>Целое число (от 1 до 36 включительно)</td>
+                  <td>-</td>
+                  <td>Количество вопросов, отображаемое на странице</td>
+                </tr>
+                <tr>
+                  <td><code>offset</code></td>
+                  <td>Целое число (от 1 до 100 включительно)</td>
+                  <td>-</td>
+                  <td>С какого по счёту объекта начать отображение вопросов</td>
+                </tr>
+                <tr>
+                  <td><code>refresh</code></td>
+                  <td>Boolean</td>
+                  <td>False</td>
+                  <td>
+                    При постраничном отображении информации (наличие в запросе параметра <code>limit</code>) все последующие запросы к API будут возвращать изначально сгенерированный пакет. 
+                    Чтобы сгенерировать новый случайный пакет, необходимо отправить запрос с параметром "refresh", равным "True". 
+                    Для последующих запросов параметр необходимо исключить из запроса либо установить ему значение "False".</td>
+                </tr>
+              </tbody>
+            </table>
+            <br><br>
+            <div class="adaptive-fs-small">
+              <h3 id="list-item-3" style="text-align: center;"><br>Параметры ответа<br><br></h3>
+            </div>
+            <br><br>
+            <table style="fs-6" class="table table-hover table-bordered border-secondary table-striped-columns">
+              <thead class="align-middle text-center">
+                <tr>
+                  <th scope="col">Параметр</th>
+                  <th scope="col">Описание</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                <tr>
+                  <td><code>question</code></td>
+                  <td>Текст вопроса</li></td>
+                </tr>
+                <tr>
+                  <td><code>answer</code></td>
+                  <td>Текст ответа</td>
+                </tr>
+                <tr>
+                  <td><code>pass_criteria</code></td>
+                  <td>Критерии зачета правильного ответа</td>
+                </tr>
+                <tr>
+                  <td><code>comments</code></td>
+                  <td>Комментарий к ответу на вопрос</td>
+                </tr>
+                <tr>
+                  <td><code>authors</code></td>
+                  <td>Автор вопроса</td>
+                </tr>
+                <tr>
+                  <td><code>sources</code></td>
+                  <td>
+                    Источники
+                </tr>
+                <tr>
+                  <td><code>count</code></td>
+                  <td>
+                    Количество вопросов в сгенерированном пакете
+                </tr>
+                <tr>
+                  <td><code>next</code></td>
+                  <td>
+                    Ссылка на следующую страницу выдачи
+                </tr>
+                <tr>
+                  <td><code>previous</code></td>
+                  <td>
+                    Ссылка на предыдущую страницу выдачи
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            <p>
+              <li>"pass_criteria", "comments", "authors", "sources" - необязательные параметры. При отстутствии данных возвращается значение "None".</li>
+              <li>Параметры "count", "next", "previous" появляются в ответе при включенной пагинации.</li>
+            </p>
+            <br>
+            <p class="adaptive-fs-big" style="text-align: center;">
+              <b>https://brainsystem.sytes.net/api/v1/questions/ (POST)</b>
+            </p>
+            <p style="text-align: center;">Добавить новый вопрос в Базу (требуется аутентификация)</p>
+            <div class="adaptive-fs-small">
+              <h3 id="list-item-2" style="text-align: center;">Параметры запроса</h3><br>
+            </div>
+              <br><br>
+              <table style="fs-6" class="table table-hover table-bordered border-secondary table-striped-columns">
+                <thead class="align-middle text-center">
+                  <tr>
+                    <th scope="col">Параметр</th>
+                    <th scope="col">Нахождение в запросе</th>
+                    <th scope="col">Описание</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr>
+                    <td><code>Authorization</code></td>
+                    <td>Headers</td>
+                    <td><code>Bearer {JWT token}</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>package</code></td>
+                    <td>Body</td>
+                    <td>Название пакета, в который входит вопрос</td>
+                  </tr>
+                  <tr>
+                    <td><code>tour</code></td>
+                    <td>Body</td>
+                    <td>Номер тура в пакете</td>
+                  </tr>
+                  <tr>
+                    <td><code>number</code></td>
+                    <td>Body</td>
+                    <td>Номер вопроса в пакете</td>
+                  </tr>
+                  <tr>
+                    <td><code>question_type</code></td>
+                    <td>Body</td>
+                    <td>Тип вопроса:
+                      <ul><li>"Ч" - "Что-где-когда"</li><li>"Б" - "брейн-ринг"</li><li>"Я" - "Своя игра"</li></ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>question</code></td>
+                    <td>Body</td>
+                    <td>Текст вопроса (обязательное поле)</td>
+                  </tr>
+                  <tr>
+                    <td><code>answer</code></td>
+                    <td>Body</td>
+                    <td>Текст ответа (обязательное поле)</td>
+                  </tr>
+                  <tr>
+                    <td><code>pass_criteria</code></td>
+                    <td>Body</td>
+                    <td>Критерий зачета ответа</td>
+                  </tr>
+                  <tr>
+                    <td><code>authors</code></td>
+                    <td>Body</td>
+                    <td>Автор(ы) вопроса</td>
+                  </tr>
+                  <tr>
+                    <td><code>sources</code></td>
+                    <td>Body</td>
+                    <td>Источник(и) информации</td>
+                  </tr>
+                  <tr>
+                    <td><code>comments</code></td>
+                    <td>Body</td>
+                    <td>Комментарий к ответу</td>
+                  </tr>                  
+                </tbody>
+              </table>
+            </div>
+            <br>
+            <p class="adaptive-fs-big" style="text-align: center;">
+              <b>https://brainsystem.sytes.net/api/v1/questions/&lt;id&gt;/ (GET)</b>
+            </p>
+            <p style="text-align: center;">Получение информации о конкретном вопросе из Базы</p>
+            <div class="adaptive-fs-small">
+              <h3 id="list-item-4" style="text-align: center;">Примеры запросов к API<br><br></h3>
+            </div>
+            <p class="adaptive-fs-small">
+              Сгенерировать пакет из 25 случайных вопросов. Категория вопросов - "Брейн-ринг":
+              <li class="adaptive-fs-small">
+                GET <a class="link-primary link-offset-2 link-underline-opacity-25" target="_blank" href="https://brainsystem.sytes.net/api/v1/questions/?questions_limit=25&type=brain-ring">https://brainsystem.sytes.net/api/v1/questions/?questions_limit=25&type=brain-ring</a>
+              </li>
+            </p>
+            <br>
+            <p class="adaptive-fs-small">
+              Сгенерировать пакет из 40 случайных вопросов. 
+              Категория вопросов - "Что-где-когда". 
+              Постраничная выдача, 10 вопросов на странице:
+              <li class="adaptive-fs-small">
+                GET <a class="link-primary link-offset-2 link-underline-opacity-25" target="_blank" href="https://brainsystem.sytes.net/api/v1/questions/?limit=10&questions_limit=40&type=what-where-when">https://brainsystem.sytes.net/api/v1/questions/?limit=10&questions_limit=40&type=what-where-when</a>
+              </li>
+            </p>
+            <br>
+            <p class="adaptive-fs-small">
+              Сгенерировать пакет из 40 случайных вопросов. 
+              Категория вопросов - "Что-где-когда". 
+              Постраничная выдача, 10 вопросов на странице. 
+              Вторая страница выдачи:
+              <li class="adaptive-fs-small">
+                GET <a class="link-primary link-offset-2 link-underline-opacity-25" target="_blank" href="https://brainsystem.sytes.net/api/v1/questions/?limit=10&offset=10&questions_limit=40&type=what-where-when">https://brainsystem.sytes.net/api/v1/questions/?limit=10&offset=10&questions_limit=40&type=what-where-when</a>
+              </li>
+            </p>
+            <br>
+            <p class="adaptive-fs-small">
+              Сгенерировать новый пакет из 40 случайных вопросов. 
+              Категория вопросов - "Что-где-когда". 
+              Постраничная выдача, 10 вопросов на странице:
+              <li class="adaptive-fs-small">
+                GET <a class="link-primary link-offset-2 link-underline-opacity-25" target="_blank" href="https://brainsystem.sytes.net/api/v1/questions/?limit=10&offset=10&questions_limit=40&refresh=True">https://brainsystem.sytes.net/api/v1/questions/?limit=10&offset=10&questions_limit=40&refresh=True</a>
+              </li>
+            </p>
+            <br><br>
+            <div class="adaptive-fs-small">
+              <h3 id="list-item-5" style="text-align: center;">Примеры ответов API<br><br></h3>
+            </div>
+            <br>
+            <div class="card">
+              <code>
+                <pre id="Example" ></pre>
+                <script>
+                  var data = [
+                        {
+                            "question": "В тексте, озаглавленном \"АЛЬФЫ\", созданном 165 лет назад, было примерно\n19500 слов вместе с комментариями. Самая последняя редакция текста,\nозаглавленного \"АЛЬФЫ\", состоит вместе с комментариями из 5706 слов.\nНазовите АЛЬФЫ двумя словами.",
+                            "answer": "\"Белые ночи\".",
+                            "pass_criteria": "None",
+                            "comments": "Повесть Достоевского и текст пакета турнира \"Белые ночи\".",
+                            "authors": "Владимир Грамагин (Нью-Йорк)",
+                            "sources": "None"
+                        }
+                    ];
+              
+                    document.getElementById("Example").innerHTML = JSON.stringify(data, null, 4);
+                </script>
+              </code>
+            </div>
+            <br>
+
+            <div class="card">
+              <code>
+                <pre id="Example2" ></pre>
+                <script>
+                  var data2 = [
+                  {
+                      "question": "Закончите изречение, приписываемое известному ловеласу Казанове:\n\"Никогда не хвастайся своей женой. Женщины могут обидеться, а мужчины\nзахотят...\".",
+                      "answer": "\"... в этом убедиться\".",
+                      "pass_criteria": "None",
+                      "comments": "None",
+                      "authors": "Алексей Бигдан",
+                      "sources": "\"Телегород\", 2000, N 48."
+                  },
+                  {
+                      "question": "Согласно Овидию, когда ОН мыл руки, вода с ЕГО ладоней могла бы обмануть\nДанаю. Назовите ЕГО.",
+                      "answer": "Мидас.",
+                      "pass_criteria": "None",
+                      "comments": "   \"Даже когда омывал он ладони струей водяною,\n   Влага, с ладоней струясь, обмануть могла бы Данаю!\".",
+                      "authors": "Наталья Кудряшова (Санкт-Петербург)",
+                      "sources": "Публий Овидий Назон. Метаморфозы.\nhttp://lib.ru/POEEAST/OWIDIJ/ovidii2_2.txt"
+                  },
+                  {
+                      "question": "В рамках борьбы за экологию компания Google отказалась от газонокосилок\nи закупила ИХ. Как зовут того из НИХ, который является символом\nизвестного интернет-проекта?",
+                      "answer": "Фрэнк.",
+                      "pass_criteria": "None",
+                      "comments": "Козел Фрэнк - символ ЖЖ.",
+                      "authors": "Юрий Выменец (Санкт-Петербург)",
+                      "sources": "Газета \"24 часа\", N 42 (1057). - С. 24."
+                  }
+              ];
+              
+                  document.getElementById("Example2").innerHTML = JSON.stringify(data2, null, 4);
+                  
+                </script>
+              </code>
+            </div>
+            <br>
+            <div class="card">
+              <code>
+                <pre id="Example1" ></pre>
+                <script>
+                  var data1 = {
+                    "count": 40,
+                    "next": "https://brainsystem.sytes.net/api/v1/questions/?limit=2&offset=2&questions_limit=40&type=what-where-when",
+                    "previous": null,
+                    "results": [
+                        {
+                            "question": "В \"Мемуарах личной собаки президента\" все события описывается от лица\nсобаки. Цитата: \"Приходили какие-то люди, снимали хозяина для\nтелевидения. Сначала на фоне семьи, потом отдельно крупным планом... и в\nразных ракурсах. Я поняла только одно слово, после чего гости быстро\nушли\". А что это было за слово?",
+                            "answer": "Фас (\"... профиль, фас...\").",
+                            "pass_criteria": "None",
+                            "comments": "None",
+                            "authors": "Евгений Копейка",
+                            "sources": "А.В.Дмитриев \"Социология политического юмора\", Москва, \"Росспэн\", 1998,\nстр.81."
+                        },
+                        {
+                            "question": "Однажды, после очень неудачной игры - как всей команды, так и моей лично\n- между Максимом Сидоровым и мной состоялся следующий диалог:\n   - Да, - сказал я, - что-то я сегодня не великий итальянский режиссер.\n   - Да уж, - согласился Макс, - ты сегодня скорее известный московский\nзнаток.\n   Уважаемые знатоки, о каких людях шла речь в разговоре?",
+                            "answer": "Бернардо Бертолуччи и Юрий Бершидский.",
+                            "pass_criteria": "None",
+                            "comments": "Произнесите обе фамилии вслух. Получится похоже на \"Бер то лучший\" А Бер\nшидский в вольном переводе с английского...",
+                            "authors": "Илья Бер, Максим Сидоров",
+                            "sources": "Указан в вопросе."
+                        }
+                    ]
+                };
+              
+                  document.getElementById("Example1").innerHTML = JSON.stringify(data1, null, 4);
+                  
+                </script>
+              </code>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

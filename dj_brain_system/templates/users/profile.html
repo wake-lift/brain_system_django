@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+  <div class="container" style="width: 40rem;">
+    <h3 class="adaptive-fs-title" style="text-align: center;">Профиль пользователя {{ user.username }}</h3><br><br><br>
+    <div class="text-center">
+      <h4 class="adaptive-fs-big" style="text-align: center;">Редактировать личные данные:</h4><br>
+    </div>
+
+      <form action="{% url 'profile' user.username %}" method="post" class="form adaptive-fs">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <br>
+        {% bootstrap_button button_type="submit" content="Подтвердить" button_class="btn btn-outline-secondary adaptive-fs" %}
+      </form>
+
+      <br><br><br>
+      
+      <div class="text-center">
+        <form action="{% url 'password_change' %}">
+          <button type="submit" class="btn btn-outline-success adaptive-fs">Изменить пароль</button>
+        </form>
+        <br><br>
+        <form action="{% url 'delete' user.username %}">
+          <button type="submit" class="btn btn-outline-danger adaptive-fs-big">Удалить аккаунт</button>
+        </form>
+      </div>
+  </div>
+
+{% endblock %}

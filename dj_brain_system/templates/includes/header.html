@@ -1,0 +1,79 @@
+{% load static %}
+
+
+<div class="container border-bottom">
+
+  <div class="row align-items-center">
+    
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 pb-2 pt-3">
+        <a href="{% url 'common_pages:main' %}" class="d-flex align-items-center justify-content-center text-dark text-decoration-none">
+          <img class="bi me-2" width="40" height="40" role="img" src="{% static 'img/logo.png' %}"></img>
+          <span class="adaptive-fs-big">Brain System</span>
+          </a>
+    </div>
+
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 pb-2 pt-3">
+      <div class="justify-content-center">
+        {% with request.resolver_match.view_name as view_name %}
+        <ul class="nav justify-content-center text-center adaptive-fs">
+
+          {% comment %} <li><a href="{% url 'questions:questions' %}" class="{% if view_name == 'questions:questions' %} disabled {% endif %} nav-link px-2 link-dark">База вопросов</a></li>
+          <li><a href="{% url 'questions:tg-bot' %}" class="{% if view_name == 'questions:tg-bot' %} disabled {% endif %} nav-link px-2 link-dark">Telegram-бот</a></li>
+          <li><a href="{% url 'api:info' %}" class="{% if view_name == 'api:info' %} disabled {% endif %} nav-link px-2 link-dark">BrainAPI</a></li> {% endcomment %}
+          
+          <div class="dropdown adaptive-fs px-1">
+            <button class="btn btn-outline-secondary dropdown-toggle adaptive-fs" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Документация
+            </button>
+            <ul class="dropdown-menu adaptive-fs-small">
+              <li><a class="dropdown-item {% if view_name == 'brain_system:operating' %} disabled {% endif %}" href="{% url 'brain_system:operating' %}">Описание работы</a></li>
+              <li><a class="dropdown-item {% if view_name == 'brain_system:circuit' %} disabled {% endif %}" href="{% url 'brain_system:circuit' %}" href="#">Электрическая схема</a></li>
+              <li><a class="dropdown-item {% if view_name == 'brain_system:pcb' %} disabled {% endif %}" href="{% url 'brain_system:pcb' %}">Печатная плата</a></li>
+              <li><a class="dropdown-item {% if view_name == 'brain_system:printed' %} disabled {% endif %}" href="{% url 'brain_system:printed' %}">Печатные детали</a></li>
+              <li><a class="dropdown-item {% if view_name == 'brain_system:bought' %} disabled {% endif %}" href="{% url 'brain_system:bought' %}">Покупные изделия</a></li>
+              <li><a class="dropdown-item {% if view_name == 'brain_system:firmware' %} disabled {% endif %}" href="{% url 'brain_system:firmware' %}">Программное обеспечение</a></li>
+            </ul>
+          </div>
+
+
+          <div class="dropdown adaptive-fs px-1">
+            <button class="btn btn-outline-secondary dropdown-toggle adaptive-fs" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              База вопросов
+            </button>
+            <ul class="dropdown-menu adaptive-fs-small">
+              <li><a class="dropdown-item {% if view_name == 'questions:questions' %} disabled {% endif %}" href="{% url 'questions:questions' %}">Случайные вопросы из Базы</a></li>
+              <li><a class="dropdown-item {% if view_name == 'questions:add' %} disabled {% endif %}" href="{% url 'questions:add' %}" href="#">Добавить вопрос в Базу</a></li>
+              <li><a class="dropdown-item {% if view_name == 'api:info' %} disabled {% endif %}" href="{% url 'api:info' %}">BrainAPI</a></li>
+              <li><a class="dropdown-item {% if view_name == 'questions:tg-bot' %} disabled {% endif %}" href="{% url 'questions:tg-bot' %}">Telegram-бот</a></li>
+            </ul>
+          </div>
+
+          {% if user.is_authenticated %}
+            <a class="nav-link text-secondary" href="{% url 'profile' user.username %}">{{ user.username }}</a>
+            {% comment %} <span class="navbar-text text-secondary fw-bold ms-2">{{ user.username }}</span> {% endcomment %}
+            <li class="nav-item">
+              <a class="nav-link text-secondary" href="{% url 'logout' %}">Выйти</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="text-secondary nav-link fw-bolder {% if view_name == 'login' %} active {% endif %}" href="{% url 'login' %}">Войти</a>
+            </li>
+
+          {% endif %}
+
+
+
+
+
+
+        </ul>
+        {% endwith %}
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+

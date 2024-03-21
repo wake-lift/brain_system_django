@@ -1,0 +1,11 @@
+venv_docker
+venv
+.git
+.idea
+.vscode
+.env
+db.sqlite3
+db_main.sqlite
+collected_static/
+**.djcache
+data.json

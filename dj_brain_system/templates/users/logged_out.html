@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="text-center adaptive-fs-title">Вы вышли из системы</h3><br>
+  <div class="col d-flex justify-content-center">
+    <div class="text-center" style="width: 40rem;">
+        <p><a class="link-secondary adaptive-fs-big" href="{% url 'login' %}">Войти снова</a></p>
+        <p><a class="link-secondary adaptive-fs-big" href="{% url 'common_pages:main' %}">На главную</a></p>
+    </div>
+  </div>
+{% endblock %}

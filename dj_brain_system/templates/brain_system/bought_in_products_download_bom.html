@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Покупные изделия - скачать BOM
+{% endblock %}
+{% block content %}
+<style>
+  a {
+   color: #000080; /* Цвет обычной ссылки */
+  }
+  a:visited {
+   color: #2F4F4F; /* Цвет посещённой ссылки */
+  }
+ </style>
+<div class="adaptive-fs-big text-center">
+  <a href="{% static 'brain_system_BOM.ods' %}" download>brain_system_BOM.ods</a><br>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+  <div class="container" style="width: 40rem;">
+    <h3 class="adaptive-fs-title" style="text-align: center;">Удалить пользователя "{{ user.username }}" безвозвратно</h3><br><br><br>
+    <div class="text-center">
+      <form method="post">
+        {% csrf_token %}
+        {% bootstrap_button button_type="submit" button_class="btn btn-outline-danger adaptive-fs-title" content="Подтвердить" %}
+      </form>
+    </div>
+
+  </div>
+
+{% endblock %}

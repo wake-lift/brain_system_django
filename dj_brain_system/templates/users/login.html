@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p class="text-center form adaptive-fs-big">
+        У вашего аккаунта нет доступа к этой странице.
+        Чтобы продолжить, войдите в систему с аккаунтом,
+        у которого есть доступ.
+      </p>
+    {% else %}
+      <p class="text-center form adaptive-fs-big">
+        Пожалуйста, войдите в систему,
+        чтобы просматривать эту страницу.
+      </p>
+    {% endif %}
+    <br>
+  {% endif %}
+  <div class="container" style="width: 40rem;">
+    <h3 class="adaptive-fs-title" style="text-align: center;">Войти в систему</h3><br>
+    <form action="{% url 'login' %}" method="post" class="form adaptive-fs">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+          <input type="hidden" name="next" value="{{ next }}">
+          <br>
+          {% bootstrap_button button_type="submit" content="Войти" button_class="btn btn-outline-secondary adaptive-fs" %}
+    </form>
+    <br><br>
+    <a class="link-secondary adaptive-fs" href="{% url 'password_reset' %}">Забыли пароль?</a>
+    <br><br><br>
+    <div class="text-center">
+      <a class="link-primary adaptive-fs-big" href="{% url 'registration' %}">Создать новый аккаунт</a>
+    </div>
+  </div>
+
+{% endblock %}
+
+
