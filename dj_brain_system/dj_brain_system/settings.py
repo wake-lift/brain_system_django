@@ -82,6 +82,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        # закомментировать при подключении к локальной БД
         'HOST': os.getenv('DB_HOST', ''),
         'PORT': os.getenv('DB_PORT', 5432)
     }
@@ -128,6 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CAPTCHA_FONT_SIZE = 56
 
 CSRF_FAILURE_VIEW = 'common_pages.views.csrf_failure'
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_CLASSES': [
