@@ -1,9 +1,16 @@
 import pandas as pd
-from django.shortcuts import render
+from django.http import FileResponse
 from django.views.generic import ListView
 
 from .models import BoughtInProduct
 from .services import get_base_queryset, unite_rows_with_multiple_links
+
+
+class ProductsListView(ListView):
+    """Class for page with bought-in products table generation."""
+    model = BoughtInProduct
+    queryset = get_base_queryset()
+    template_name = 'brain_system/bought_in_products.html'
 
 
 def export_model_to_ods(request):
@@ -30,14 +37,7 @@ def export_model_to_ods(request):
     with pd.ExcelWriter('static_dev/brain_system_BOM.ods',
                         engine='odf') as doc:
         df.to_excel(doc, sheet_name='Bought-in poducts')
-    return render(
-        request,
-        'brain_system/bought_in_products_download_bom.html'
+    return FileResponse(
+        open('static_dev/brain_system_BOM.ods', 'rb'),
+        as_attachment=True
     )
-
-
-class ProductsListView(ListView):
-    """Class for page with bought-in products table generation."""
-    model = BoughtInProduct
-    queryset = get_base_queryset()
-    template_name = 'brain_system/bought_in_products.html'

@@ -41,10 +41,14 @@ def get_initial_queryset(question_type):
         condemned=False,
         is_published=True
     )
+    questions_quantity = get_max_question_sets()[question_type]
+    randomizing_limit = questions_quantity - SET_FOR_RANDOMIZING - 1
     start_point = random.randint(
         0,
-        get_max_question_sets()[question_type] - SET_FOR_RANDOMIZING - 1
+        randomizing_limit if randomizing_limit > 0 else questions_quantity
     )
+    if questions_quantity < SET_FOR_RANDOMIZING:
+        start_point = 0
     return queryset[start_point: start_point + SET_FOR_RANDOMIZING]
 
 

@@ -69,6 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dj_brain_system.wsgi.application'
 
+# раскомментировать для проведения локальных тестов
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -76,6 +77,7 @@ WSGI_APPLICATION = 'dj_brain_system.wsgi.application'
 #     }
 # }
 
+# закомментировать для проведения локальных тестов
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -108,13 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 STATIC_URL = '/static/'
@@ -154,19 +152,21 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_USE_SSL = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
 INTERNAL_IPS = os.getenv('INTERNAL_IPS', 'localhost').split()
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': BASE_DIR / os.getenv('CACHES_LOCATION'),
+if os.getenv('TESTING_MODE') != 'True':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': BASE_DIR / os.getenv('CACHES_LOCATION'),
+        }
     }
-}
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_HOST = os.getenv('EMAIL_HOST')
+    EMAIL_PORT = os.getenv('EMAIL_PORT')
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_USE_SSL = True
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+else:
+    CAPTCHA_TEST_MODE = True
