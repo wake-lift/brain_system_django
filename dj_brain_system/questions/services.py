@@ -36,7 +36,10 @@ def get_initial_queryset(question_type):
     """Формирует первоначальный список вопросов с учетом типа вопроса и
     заданного константой "SET_FOR_RANDOMIZING" размера выборки.
     Функция необходима для ускорения запросов к БД."""
-    queryset = Questions.objects.filter(
+    queryset = Questions.objects.only(
+        'question', 'answer', 'pass_criteria',
+        'authors', 'sources', 'comments',
+    ).filter(
         question_type=question_type,
         condemned=False,
         is_published=True
