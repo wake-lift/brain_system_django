@@ -1,13 +1,12 @@
 import os
 from datetime import timedelta
-# раскомментировать при запуске локального сервера
-# from dotenv import load_dotenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# раскомментировать при запуске локального сервера
-# load_dotenv(dotenv_path=BASE_DIR / '../.env')
+if os.getenv('DEVELOPMENT_SERVER') != 'True':
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=BASE_DIR / '../.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -68,27 +67,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'dj_brain_system.wsgi.application'
-
-# раскомментировать для проведения локальных тестов
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db_main.sqlite',
-#     }
-# }
-
-# закомментировать для проведения локальных тестов
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        # закомментировать при подключении к локальной БД
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', 5432)
-    }
-}
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -154,11 +132,21 @@ SIMPLE_JWT = {
 
 INTERNAL_IPS = os.getenv('INTERNAL_IPS', 'localhost').split()
 
-if os.getenv('TESTING_MODE') != 'True':
-    CACHES = {
+if os.getenv('DEVELOPMENT_SERVER') != 'True':
+    DATABASES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-            'LOCATION': BASE_DIR / os.getenv('CACHES_LOCATION'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('DB_HOST', ''),
+            'PORT': os.getenv('DB_PORT', 5432)
+        }
+    }
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": f"redis://redis:{os.getenv('REDIS_PORT')}",
         }
     }
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -169,4 +157,16 @@ if os.getenv('TESTING_MODE') != 'True':
     EMAIL_USE_SSL = True
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db_main.sqlite',
+        }
+    }
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': BASE_DIR / os.getenv('CACHES_LOCATION'),
+        }
+    }
     CAPTCHA_TEST_MODE = True
