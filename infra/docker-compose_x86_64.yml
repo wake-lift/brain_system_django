@@ -1,5 +1,3 @@
-version: '3.8'
-
 volumes:
   pg_data:
   static:
@@ -7,19 +5,21 @@ volumes:
 
 services:
   db:
-    image: arm64v8/postgres:15
+    image: postgres:15
     restart: always
     env_file: ../.env
     volumes:
       - pg_data:/var/lib/postgresql/data/
   
   redis:
-    image: arm64v8/redis:7
+    image: redis:7
     restart: always
     env_file: ../.env
 
   backend:
-    image: whtn01z/dj_brain_system_backend
+    build:
+      context: ../dj_brain_system/
+      dockerfile: x86_64_arch.Dockerfile
     env_file: ../.env
     volumes:
       - static:/app/production_static/
@@ -29,16 +29,20 @@ services:
       - redis
   
   tg_bot:
-    image: whtn01z/dj_brain_system_bot
+    build:
+      context: ../telegram_bot/
+      dockerfile: x86_64_arch.Dockerfile
     env_file: ../.env
     restart: always
     depends_on:
       - db
 
   nginx:
-    image: whtn01z/dj_brain_system_nginx
+    build:
+      context: ./
+      dockerfile: x86_64_arch.Dockerfile
     ports:
-      - "8000:80"
+      - "80:80"
     volumes:
       - static:/staticfiles/
       - media:/media/

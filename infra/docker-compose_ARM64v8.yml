@@ -1,0 +1,52 @@
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file: ../.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+  
+  redis:
+    image: redis:7
+    restart: always
+    env_file: ../.env
+
+  backend:
+    build:
+      context: ../dj_brain_system/
+      dockerfile: ARM64v8_arch.Dockerfile
+    env_file: ../.env
+    volumes:
+      - static:/app/production_static/
+      - media:/app/media/
+    depends_on:
+      - db
+      - redis
+  
+  tg_bot:
+    build:
+      context: ../telegram_bot/
+      dockerfile: ARM64v8_arch.Dockerfile
+    env_file: ../.env
+    restart: always
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ./
+      dockerfile: ARM64v8_arch.Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - static:/staticfiles/
+      - media:/media/
+    depends_on:
+      - db
+      - backend
+      - redis
