@@ -4,7 +4,7 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
-from questions.models import Questions
+from questions.models import Question
 
 from .serializers import (QuestionCreateSerializer, QuestionRetrieveSerializer,
                           QuestionsListSerializer, RequestParamsSerializer)
@@ -59,12 +59,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_201_CREATED, headers=headers)
 
     def get_object(self):
-        return get_object_or_404(Questions, pk=self.kwargs['pk'])
+        return get_object_or_404(Question, pk=self.kwargs['pk'])
 
     def _get_base_queryset(self, question_type, questions_limit, search):
         """Формирует базовую выдачу с учетом параметров API-запроса."""
-        queryset = Questions.objects.filter(
-            condemned=False,
+        queryset = Question.objects.filter(
+            is_condemned=False,
             is_published=True,
             question_type=QUESTION_TYPE_DICT[question_type],
         )

@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 
 from common_pages.models import Feedback
-from questions.models import Questions
+from questions.models import Question
 
 
 @pytest.mark.django_db
@@ -37,27 +37,27 @@ def test_user_can_add_question(admin_client, question_add_form_data):
     """
     url = reverse('questions:add')
     admin_client.post(url, data=question_add_form_data)
-    assert Questions.objects.count() == 1, (
+    assert Question.objects.count() == 1, (
         'Запись о новом вопросе не была внесена в БД.'
     )
-    question = Questions.objects.get()
+    question = Question.objects.get()
     assert question.question_type == question_add_form_data['question_type'], (
-        'Содержимое поля "question_type" объекта Questions,'
+        'Содержимое поля "question_type" объекта Question,'
         ' сохраненного в БД, не соответствует ожидаемому.'
     )
     assert question.question == question_add_form_data['question'], (
-        'Содержимое поля "question" объекта Questions,'
+        'Содержимое поля "question" объекта Question,'
         ' сохраненного в БД, не соответствует ожидаемому.'
     )
     assert question.answer == question_add_form_data['answer'], (
-        'Содержимое поля "answer" объекта Questions,'
+        'Содержимое поля "answer" объекта Question,'
         ' сохраненного в БД, не соответствует ожидаемому.'
     )
-    assert question.condemned is False, (
-        'Содержимое поля "condemned" объекта Questions,'
+    assert question.is_condemned is False, (
+        'Содержимое поля "is_condemned" объекта Question,'
         ' сохраненного в БД, не соответствует дефолтному значению.'
     )
     assert question.is_published is False, (
-        'Содержимое поля "is_published" объекта Questions,'
+        'Содержимое поля "is_published" объекта Question,'
         ' сохраненного в БД, не соответствует дефолтному значению.'
     )

@@ -165,8 +165,8 @@ else:
     }
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-            'LOCATION': BASE_DIR / os.getenv('CACHES_LOCATION'),
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     }
+
     CAPTCHA_TEST_MODE = True

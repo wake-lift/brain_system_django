@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from .models import Questions
+from .models import Question
 
 
-@admin.register(Questions)
-class QuestionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'question', 'condemned', 'is_published',)
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'question', 'is_condemned', 'is_published',)
     search_fields = (
         'package',
         'tour',

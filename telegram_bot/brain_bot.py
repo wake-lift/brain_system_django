@@ -84,7 +84,7 @@ async def get_question(question_type: str) -> None | dict:
                             authors,
                             sources
                         FROM questions_questions
-                        WHERE (NOT condemned AND question_type = (%s))
+                        WHERE (NOT is_condemned AND question_type = (%s))
                         LIMIT 1
                         OFFSET (%s);""",
                     (question_type, start_point)

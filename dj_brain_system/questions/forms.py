@@ -1,7 +1,7 @@
 from django import forms
 from django_bootstrap5.widgets import RadioSelectButtonGroup
 
-from .models import Questions
+from .models import Question
 
 
 class QuestionForm(forms.Form):
@@ -44,7 +44,7 @@ class QuestionForm(forms.Form):
 class QuestionAddForm(forms.ModelForm):
 
     class Meta:
-        model = Questions
+        model = Question
         fields = ('package', 'tour', 'number', 'question_type',
                   'question', 'answer', 'pass_criteria', 'authors',
                   'sources', 'comments',)

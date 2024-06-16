@@ -5,7 +5,7 @@ from django.core.serializers import deserialize, serialize
 from django.shortcuts import render
 
 from .forms import QuestionAddForm, QuestionForm
-from .models import Questions
+from .models import Question
 from .services import get_initial_queryset, get_pagination_obj
 
 
@@ -15,10 +15,10 @@ def questions(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['search_pattern']:
-                questions = Questions.objects.filter(
+                questions = Question.objects.filter(
                     question_type=form.cleaned_data['question_type'],
                     question__contains=form.cleaned_data['search_pattern'],
-                    condemned=False,
+                    is_condemned=False,
                     is_published=True
                 )
             else:

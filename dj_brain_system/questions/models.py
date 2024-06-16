@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Questions(models.Model):
+class Question(models.Model):
     QUESTION_TYPE_CHOICES = [
         ('Б', 'Брейн-ринг'),
         ('ДБ', 'Брейн-ринг (детский)'),
@@ -34,11 +34,11 @@ class Questions(models.Model):
         choices=QUESTION_TYPE_CHOICES,
         max_length=2,
         verbose_name='Тип вопроса',
-        default=QUESTION_TYPE_CHOICES[4],
-        db_index=True
+        default=QUESTION_TYPE_CHOICES[4]
     )
     question = models.TextField(
         verbose_name='Текст вопроса',
+        db_index=True
     )
     answer = models.TextField(
         verbose_name='Ответ на вопрос',
@@ -65,15 +65,13 @@ class Questions(models.Model):
     )
     """Вопросы, которые не годятся для выдачи: содержат ссылку на изображение,
     угловые скобки, некодируемый набор символов и т.п."""
-    condemned = models.BooleanField(
+    is_condemned = models.BooleanField(
         verbose_name='Вопрос исключен из выдачи',
-        default=False,
-        db_index=True,
+        default=False
     )
     is_published = models.BooleanField(
         verbose_name='Вопрос опубликован',
-        default=False,
-        db_index=True,
+        default=False
     )
 
     class Meta:

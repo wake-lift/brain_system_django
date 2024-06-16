@@ -37,7 +37,7 @@ def test_file_response(client):
 @pytest.mark.django_db
 def test_bought_in_products_page(
     client, bought_in_product,
-    bought_in_product_as_a_part_of,
+    single_unit,
     bought_in_product_link
 ):
     """
@@ -49,12 +49,12 @@ def test_bought_in_products_page(
     assert bought_in_product in object_list, (
         f'В ответе на запрос к адресу {url} нет объекта BoughtInProduct.'
     )
-    assert object_list[0].a_part_of == bought_in_product_as_a_part_of, (
-        'В поле "a_part_of" объекта BoughtInProduct отсутствует'
-        ' объект BoughtInProductAsAPartOf.'
+    assert object_list[0].unit == single_unit, (
+        'В поле "unit" объекта BoughtInProduct отсутствует'
+        ' объект Unit.'
     )
-    assert object_list[0].a_part_of.name == 'Блок_1', (
-        'Содержимое поля "name" объекта BoughtInProductAsAPartOf'
+    assert object_list[0].unit.name == 'Блок_1', (
+        'Содержимое поля "name" объекта Unit'
         ' не соответствует ожидаемому.'
     )
     assert object_list[0].name == 'Деталь_1', (

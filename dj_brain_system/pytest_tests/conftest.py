@@ -1,28 +1,27 @@
 import pytest
 
-from brain_system.models import (BoughtInProduct, BoughtInProductAsAPartOf,
-                                 BoughtInProductLink)
-from questions.models import Questions
+from brain_system.models import BoughtInProduct, BoughtInProductLink, Unit
+from questions.models import Question
 
 
 @pytest.fixture
-def bought_in_product_as_a_part_of():
+def single_unit():
     """
-    Создает одну запись в таблице "BoughtInProductAsAPartOf".
+    Создает одну запись в таблице "Unit".
     """
-    return BoughtInProductAsAPartOf.objects.create(
+    return Unit.objects.create(
         name='Блок_1',
     )
 
 
 @pytest.fixture
-def bought_in_product(bought_in_product_as_a_part_of):
+def bought_in_product(single_unit):
     """
     Создает одну запись в таблице "BoughtInProduct".
     """
     return BoughtInProduct.objects.create(
         name='Деталь_1',
-        a_part_of=bought_in_product_as_a_part_of,
+        unit=single_unit,
         quantity=1,
         product_type='Тип_1',
         comment='Комментарий_1',
@@ -79,12 +78,12 @@ def question_add_form_data():
 @pytest.fixture
 def question_set():
     """
-    Создает двадцать записей в таблице "Questions".
+    Создает двадцать записей в таблице "Question".
     """
     questions = []
     for i in range(1, 21):
         questions.append(
-            Questions(
+            Question(
                 package='Пакет',
                 tour='Тур',
                 number=i,
@@ -98,7 +97,7 @@ def question_set():
                 is_published=True,
             )
         )
-    return Questions.objects.bulk_create(questions)
+    return Question.objects.bulk_create(questions)
 
 
 @pytest.fixture

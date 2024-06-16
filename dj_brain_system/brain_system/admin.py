@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import (BoughtInProduct, BoughtInProductAsAPartOf,
-                     BoughtInProductLink)
+from .models import BoughtInProduct, BoughtInProductLink, Unit
 
 
 class BoughtInProductLinkInline(admin.StackedInline):
@@ -13,18 +12,18 @@ class BoughtInProductLinkInline(admin.StackedInline):
 class BoughtInProductAdmin(admin.ModelAdmin):
     list_display = (
         'name',
-        'a_part_of',
+        'unit',
         'quantity',
         'product_type',
         'comment',
     )
     list_editable = (
-        'a_part_of',
+        'unit',
         'quantity',
         'product_type',
     )
     search_fields = ('name',)
-    list_filter = ('a_part_of',)
+    list_filter = ('unit',)
     list_display_links = ('name',)
     inlines = (
         BoughtInProductLinkInline,
@@ -46,8 +45,8 @@ class BoughtInProductLinkAdmin(admin.ModelAdmin):
     empty_value_display = 'Не задано'
 
 
-@admin.register(BoughtInProductAsAPartOf)
-class BoughtInProductAsAPartOfAdmin(admin.ModelAdmin):
+@admin.register(Unit)
+class UnitAdmin(admin.ModelAdmin):
     list_display = (
         'name',
     )

@@ -9,8 +9,8 @@ def unite_rows_with_multiple_links(product_list: list[dict]) -> list[dict]:
         if (
             product_list[i]['name']
             == product_list[i + 1]['name']
-            and product_list[i]['a_part_of__name']
-            == product_list[i + 1]['a_part_of__name']
+            and product_list[i]['unit__name']
+            == product_list[i + 1]['unit__name']
         ):
             product_list[i + 1]['link_for_product__link'] += (
                 '\n' + product_list[i]['link_for_product__link']
@@ -24,7 +24,7 @@ def unite_rows_with_multiple_links(product_list: list[dict]) -> list[dict]:
 def get_base_queryset():
     """Формирует базовую выборку продуктов из БД."""
     return BoughtInProduct.objects.select_related(
-        'a_part_of'
+        'unit'
     ).prefetch_related(
         'link_for_product'
-    ).order_by('a_part_of')
+    ).order_by('unit')

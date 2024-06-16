@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class BoughtInProductAsAPartOf(models.Model):
+class Unit(models.Model):
     """Таблица узлов, в которые входят покупные детали."""
     name = models.CharField(
         max_length=64,
@@ -24,8 +24,8 @@ class BoughtInProduct(models.Model):
         verbose_name='Название',
         help_text='Название детали',
     )
-    a_part_of = models.ForeignKey(
-        BoughtInProductAsAPartOf,
+    unit = models.ForeignKey(
+        Unit,
         on_delete=models.SET_NULL,
         verbose_name='В составе',
         related_name='product_as_a_part_of',

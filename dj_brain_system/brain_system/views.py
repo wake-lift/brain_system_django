@@ -17,7 +17,7 @@ def export_model_to_ods(request):
     product_list = list(
         get_base_queryset().values(
             'name',
-            'a_part_of__name',
+            'unit__name',
             'quantity',
             'product_type',
             'link_for_product__link',
@@ -28,7 +28,7 @@ def export_model_to_ods(request):
     df = pd.DataFrame(product_list)
     df = df.rename(columns={
         'name': 'Название',
-        'a_part_of__name': 'Входит в состав',
+        'unit__name': 'Входит в состав',
         'quantity': 'Кол-во',
         'product_type': 'Тип',
         'link_for_product__link': 'Ссылки',

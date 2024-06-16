@@ -3,7 +3,7 @@ import random
 
 from django.core.paginator import Paginator
 
-from .models import Questions
+from .models import Question
 
 MAX_SET_JEOPARDY = None
 MAX_SET_BRAIN = None
@@ -21,9 +21,9 @@ def get_max_question_sets():
         not all([MAX_SET_JEOPARDY, MAX_SET_BRAIN, MAX_SET_WWW,])
         or (datetime.datetime.now() - LAST_REFRESH > REFRESH_INTERVAL)
     ):
-        MAX_SET_WWW = Questions.objects.filter(question_type='Ч').count()
-        MAX_SET_BRAIN = Questions.objects.filter(question_type='Б').count()
-        MAX_SET_JEOPARDY = Questions.objects.filter(question_type='Я').count()
+        MAX_SET_WWW = Question.objects.filter(question_type='Ч').count()
+        MAX_SET_BRAIN = Question.objects.filter(question_type='Б').count()
+        MAX_SET_JEOPARDY = Question.objects.filter(question_type='Я').count()
         LAST_REFRESH = datetime.datetime.now()
     return {
         'Ч': MAX_SET_WWW,
@@ -36,12 +36,12 @@ def get_initial_queryset(question_type):
     """Формирует первоначальный список вопросов с учетом типа вопроса и
     заданного константой "SET_FOR_RANDOMIZING" размера выборки.
     Функция необходима для ускорения запросов к БД."""
-    queryset = Questions.objects.only(
+    queryset = Question.objects.only(
         'question', 'answer', 'pass_criteria',
         'authors', 'sources', 'comments',
     ).filter(
         question_type=question_type,
-        condemned=False,
+        is_condemned=False,
         is_published=True
     )
     questions_quantity = get_max_question_sets()[question_type]
