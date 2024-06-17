@@ -83,7 +83,7 @@ async def get_question(question_type: str) -> None | dict:
                             comments,
                             authors,
                             sources
-                        FROM questions_questions
+                        FROM questions_question
                         WHERE (NOT is_condemned AND question_type = (%s))
                         LIMIT 1
                         OFFSET (%s);""",
